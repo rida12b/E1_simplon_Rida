@@ -4,112 +4,124 @@
 API de collecte et de consultation des données météorologiques pour différentes villes, utilisant l'API OpenWeatherMap.
 
 ## 🚀 Fonctionnalités
-- Collecte automatique des températures
-- Stockage en CSV et SQLite
-- API REST sécurisée
-- Filtrage par date
-- Nettoyage automatique des données
+- ✅ Collecte automatique des températures
+- ✅ Stockage en CSV et SQLite
+- ✅ API REST avec FastAPI
+- ✅ Filtrage par date
+- ✅ Nettoyage automatique des données
+- ✅ Tests unitaires et d'intégration
+- ✅ Documentation Swagger
 
 ## 🛠️ Installation
 
 1. Cloner le projet :
 ```bash
-git clone [URL_DU_PROJET]
-cd opendata_meteo
+git clone https://github.com/rida12b/E1_simplon_Rida.git
+cd E1_simplon_Rida
 ```
 
-2. Installer les dépendances :
+2. Créer un environnement virtuel :
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+3. Installer les dépendances :
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Configurer l'environnement :
-- Créer un fichier `.env` à la racine du projet
-- Ajouter votre clé API OpenWeatherMap :
-```env
-API_KEY=votre_clé_api_openweathermap
-```
-
-## 🔧 Configuration
-
-### Base de données
-- SQLite : `data/meteo.db`
-- CSV : `data/temperatures.csv`
-
-### Scripts
-- `collect_data.py` : Collecte des données
-- `store_data.py` : Gestion de la base de données
-- `clean_data.py` : Nettoyage des données
-- `api.py` : API REST
-- `test_project.py` : Tests unitaires et d'intégration
-
-## 📡 Utilisation de l'API
-
-### Authentification
-L'API nécessite une clé d'authentification. Ajoutez l'en-tête `X-API-Key` à vos requêtes :
-```
-X-API-Key: votre_clé_api_secrète
-```
-
-### Endpoints
-
-1. **GET /** : Page d'accueil
+4. Configurer l'environnement :
+- Copier `.env.example` vers `.env`
+- Modifier les variables dans `.env` avec vos valeurs
 ```bash
-curl http://localhost:8000/
+cp .env.example .env
 ```
 
-2. **GET /temperature/{ville}** : Dernière température
+## 🔧 Structure du Projet
+
+```
+opendata_meteo/
+├── data/                  # Données collectées
+│   ├── temperatures.csv   # Données au format CSV
+│   └── meteo.db          # Base SQLite
+├── api.py                # API FastAPI
+├── collect_data.py       # Script de collecte
+├── clean_data.py         # Nettoyage des données
+├── store_data.py         # Gestion de la BDD
+├── test_project.py       # Tests unitaires
+└── requirements.txt      # Dépendances
+```
+
+## 📡 Utilisation
+
+### 1. Collecte des Données
 ```bash
-curl -H "X-API-Key: votre_clé_api_secrète" http://localhost:8000/temperature/Paris
+python collect_data.py
 ```
+- Collecte automatique toutes les heures
+- Stockage en CSV et SQLite
+- Logs dans `data/collect.log`
 
-3. **GET /temperatures/{ville}** : Historique des températures
+### 2. Lancement de l'API
 ```bash
-curl -H "X-API-Key: votre_clé_api_secrète" "http://localhost:8000/temperatures/Paris?start_date=2024-01-01&end_date=2024-12-31"
+uvicorn api:app --reload
 ```
+- Documentation Swagger : http://localhost:8000/docs
+- Endpoints :
+  - GET `/temperature/{ville}` : Dernière température
+  - GET `/temperatures/{ville}` : Historique avec filtres
 
-## 🔒 Sécurité et RGPD
-
-### Sécurité
-- Authentification par clé API
-- En-têtes de sécurité HTTP
-- Protection CORS
-- Validation des entrées
-
-### RGPD
-1. **Données collectées**
-   - Ville
-   - Date et heure
-   - Température
-   - Aucune donnée personnelle n'est collectée
-
-2. **Stockage**
-   - Données stockées localement
-   - Pas de transfert vers des serveurs tiers
-   - Conservation illimitée pour analyse historique
-
-3. **Accès aux données**
-   - API sécurisée par authentification
-   - Logs d'accès anonymisés
-   - Pas de tracking des utilisateurs
-
-4. **Droits des utilisateurs**
-   - Données publiques et non personnelles
-   - Pas de nécessité de consentement RGPD
-   - Pas de données à caractère personnel
-
-## 🧪 Tests
-
-Lancer les tests :
+### 3. Tests
 ```bash
 python test_project.py
 ```
+- Tests unitaires
+- Tests d'intégration
+- Tests de la base de données
 
-## 📊 Performances
-- Collecte toutes les heures
-- Temps de réponse API < 100ms
-- Cache des requêtes fréquentes
-- Optimisation des requêtes SQL
+## 🔒 Sécurité
 
-## 📝 Licence
+### Protection des Données
+- Pas de données personnelles collectées
+- Validation des entrées
+- Protection CORS configurée
+- Logs anonymisés
+
+### Bonnes Pratiques
+- Variables sensibles dans `.env`
+- Validation des données
+- Gestion des erreurs
+- Documentation des endpoints
+
+## 📊 Maintenance
+
+### Nettoyage des Données
+```bash
+python clean_data.py
+```
+- Suppression des doublons
+- Validation des températures
+- Formatage des dates
+
+### Logs et Monitoring
+- Logs de collecte dans `data/collect.log`
+- Logs d'API dans `data/api.log`
+- Monitoring des erreurs
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créer une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
+4. Push la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
+
+## 📝 License
 MIT License - Voir le fichier LICENSE pour plus de détails.
+
+## 🙏 Remerciements
+- OpenWeatherMap pour l'API météo
+- FastAPI pour le framework
+- SQLite pour la base de données
